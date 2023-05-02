@@ -4,14 +4,14 @@ local function get_url(file, repository)
 end
 
 function pull(file, target_file, repository)
-  local url = get_url(file,repository)
+  local url = get_url(file, repository)
   target_file = target_file or file
-  shell.run("wget " .. url .. " " .. target_file)
+  os.run({}, "/rom/programs/wget", url, target_file)
 end
 
 function run(file, repository)
-  local url = get_url(file,repository)
-  shell.run("wget run " .. url)
+  local url = get_url(file, repository)
+  os.run({}, "/rom/programs/wget", "run", url)
 end
 
 function update_git()
