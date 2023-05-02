@@ -1,4 +1,4 @@
-os.loadAPI("git.lua")
+os.loadAPI("apis/git.lua")
 
 local args = {...}
 
