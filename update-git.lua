@@ -1,4 +1,4 @@
-os.loadAPI("git")
+os.loadAPI("git.lua")
 
 git.pull("git.lua");
 git.pull("update-git.lua");
