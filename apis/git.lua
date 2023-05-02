@@ -1,14 +1,17 @@
-function pull(file, target_file, repository)
+local function get_url(file, repository)
   repository = repository or "TimoHocker/cc-programs"
-  local  url = "https://raw.githubusercontent.com/" .. repository .. "/master/" .. file
-  local content = http.get(url).readAll()
-  if not content then
-    error("could not pull file " .. url);
-  end
+  return "https://raw.githubusercontent.com/" .. repository .. "/master/" .. file
+end
+
+function pull(file, target_file, repository)
+  local url = get_url(file,repository)
   target_file = target_file or file
-  local f = fs.open(target_file, "w")
-  f.write(content)
-  f.close()
+  shell.run("wget " .. url .. " " .. target_file)
+end
+
+function run(file, repository)
+  local url = get_url(file,repository)
+  shell.run("wget run " .. url)
 end
 
 function update_git()
