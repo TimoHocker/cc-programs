@@ -16,6 +16,8 @@ if cmd == "run" then
   table.remove(args, 1)
   git.pull(args[1], ".git-run.temp.lua")
   table.remove(args, 1)
+  print("Running " .. args[1])
   shell.run(".git-run.temp.lua", table.unpack(args))
+  print("Finished running " .. args[1] .. ", cleaning up")
   fs.delete(".git-run.temp.lua")
 end
