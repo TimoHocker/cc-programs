@@ -6,12 +6,12 @@ end
 function pull(file, target_file, repository)
   local url = get_url(file, repository)
   target_file = target_file or file
-  os.run({}, "/rom/programs/wget", url, target_file)
+  os.run({}, "/rom/programs/http/wget.lua", url, target_file)
 end
 
 function run(file, repository)
   local url = get_url(file, repository)
-  os.run({}, "/rom/programs/wget", "run", url)
+  os.run({}, "/rom/programs/http/wget.lua", "run", url)
 end
 
 function update_git()
