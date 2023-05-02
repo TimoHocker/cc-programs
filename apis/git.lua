@@ -1,17 +1,16 @@
-local function get_url(file, repository)
-  repository = repository or "TimoHocker/cc-programs"
-  return "https://raw.githubusercontent.com/" .. repository .. "/master/" .. file
-end
-
 function pull(file, target_file, repository)
-  local url = get_url(file, repository)
+  repository = repository or "TimoHocker/cc-programs"
+  local  url = "https://raw.githubusercontent.com/" .. repository .. "/master/" .. file
+  local request = http.get(url);
+  local content = request.readAll()
+  request.close()
+  if not content then
+    error("could not pull file " .. url);
+  end
   target_file = target_file or file
-  os.run({}, "/rom/programs/http/wget.lua", url, target_file)
-end
-
-function run(file, repository)
-  local url = get_url(file, repository)
-  os.run({}, "/rom/programs/http/wget.lua", "run", url)
+  local f = fs.open(target_file, "w")
+  f.write(content)
+  f.close()
 end
 
 function update_git()
