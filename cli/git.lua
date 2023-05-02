@@ -13,7 +13,9 @@ if cmd == "update" then
   print("Updated git")
 end
 if cmd == "run" then
-  git.pull(args[2], ".git-run.temp.lua")
-  shell.run(".git-run.temp.lua")
+  table.remove(args, 1)
+  git.pull(args[1], ".git-run.temp.lua")
+  table.remove(args, 1)
+  shell.run(".git-run.temp.lua", table.unpack(args))
   fs.delete(".git-run.temp.lua")
 end
