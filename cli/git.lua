@@ -6,7 +6,6 @@ local cmd = args[1]
 
 if cmd == "pull" then
   table.remove(args, 1)
-  print("Pulling file " .. args[1])
   git.pull(table.unpack(args))
 end
 if cmd == "update" then
