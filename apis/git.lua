@@ -12,5 +12,6 @@ function pull(file, target_file, repository)
 end
 
 function update_git()
-  pull("git.lua");
+  pull("apis/git.lua", "apis/git.lua");
+  pull("cli/git.lua", "cli/git.lua");
 end
