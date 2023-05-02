@@ -12,4 +12,4 @@ update library
 
 pull file
 
-> git pull <file> [target_file] [repository]
+> git-cli pull <file> [target_file] [repository]
