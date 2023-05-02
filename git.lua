@@ -10,3 +10,7 @@ function pull(file, target_file, repository)
   f.write(content)
   f.close()
 end
+
+function update_git()
+  pull("git.lua");
+end
