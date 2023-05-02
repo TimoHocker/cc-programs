@@ -3,11 +3,14 @@ function pull(file, target_file, repository)
   local  url = "https://raw.githubusercontent.com/" .. repository .. "/master/" .. file
   print("Pulling file " .. url)
   local request = http.get(url);
-  local content = request.readAll()
-  request.close()
-  if not content then
+  if not request then
     error("http error");
   end
+  local content = request.readAll()
+  if not content then
+    error("no content received");
+  end
+  request.close()
   target_file = target_file or file
   print("Writing file " .. target_file)
   local f = fs.open(target_file, "w")
