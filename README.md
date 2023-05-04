@@ -2,7 +2,7 @@
 
 ## Installation
 
-> wget run <https://raw.githubusercontent.com/TimoHocker/cc-programs/master/git-setup.lua>
+> wget run <https://raw.githubusercontent.com/TimoHocker/cc-programs/master/setup/git-setup.lua>
 
 ## Usage
 
