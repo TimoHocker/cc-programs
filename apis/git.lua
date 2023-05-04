@@ -25,3 +25,8 @@ function update_git()
   pull("apis/git.lua", "apis/git.lua");
   pull("cli/git.lua", "cli/git.lua");
 end
+
+return {
+  pull = pull,
+  update_git = update_git
+}
