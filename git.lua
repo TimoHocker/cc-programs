@@ -14,10 +14,11 @@ if cmd == "update" then
 end
 if cmd == "run" then
   table.remove(args, 1)
-  git.pull(args[1], ".git-run.temp.lua")
+  local file = args[1]
+  git.pull(file, ".git-run.temp.lua")
   table.remove(args, 1)
-  print("Running " .. args[1])
+  print("Running " .. file)
   shell.run(".git-run.temp.lua", table.unpack(args))
-  print("Finished running " .. args[1] .. ", cleaning up")
+  print("Finished running " .. file .. ", cleaning up")
   fs.delete(".git-run.temp.lua")
 end
