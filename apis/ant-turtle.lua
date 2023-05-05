@@ -25,13 +25,9 @@ Ant = {
     end
     print("Registering hostname " .. self.name)
     rednet.host("ant", self.name)
-    print("locating turtle with gps")
-    local x, y, z = gps.locate(2, true)
-    if x == nil then
-      error("Could not locate turtle")
-    end
-    self.position = vector.new(x, y, z)
+    self:update_location()
     rednet.broadcast("login " .. self.name .. " " .. self.position:tostring(), "ant")
+    self:run()
   end,
 
   run = function(self)
@@ -50,6 +46,17 @@ Ant = {
     if message == "ping" then
       print("Received ping from " .. id)
       rednet.send(id, "pong " .. self.name .. " " .. self.position:tostring(), "ant")
+    end
+  end,
+
+  update_location = function()
+    print("locating turtle with gps")
+    local x, y, z = gps.locate(2, true)
+    if x == nil then
+      print("Could not locate turtle")
+      self.position = nil
+    else
+      self.position = vector.new(x, y, z)
     end
   end,
 
