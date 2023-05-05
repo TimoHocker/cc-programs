@@ -1,6 +1,6 @@
 function pull(file, target_file, repository)
   repository = repository or "TimoHocker/cc-programs"
-  if string.sub(file, -4) ~= '.lua' then
+  if file:sub(-4) ~= '.lua' then
     file = file .. '.lua'
   end
   local  url = "https://raw.githubusercontent.com/" .. repository .. "/master/" .. file

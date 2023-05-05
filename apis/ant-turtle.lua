@@ -18,8 +18,9 @@ function start(modem, name)
   if x == nil then
     error("Could not locate turtle")
   end
-  rednet.broadcast("login " .. name .. " " .. x .. " " .. y .. " " .. z, "ant")
-  return { modem = modem, name = name, position = vector.new(x,y,z) }
+  local position = vector.new(x,y,z)
+  rednet.broadcast("login " .. name .. " " .. position:tostring(), "ant")
+  return { modem = modem, name = name, position = position }
 end
 
 function run(config)
@@ -27,7 +28,7 @@ function run(config)
     local id, message = rednet.receive("ant")
     if message == "ping" then
       print("Received ping from " .. id)
-      rednet.send(id, "pong " .. config.name .. " " .. config.position.tostring(), "ant")
+      rednet.send(id, "pong " .. config.name .. " " .. config.position:tostring(), "ant")
     end
   end
 end
