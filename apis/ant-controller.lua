@@ -8,6 +8,9 @@ Ant = {
     o.active = false
     o.running = false
     o.ants = {}
+    o.selected_id = nil
+    o.selected_line = nil
+    o.mode = "list"
     return o
   end,
 
@@ -22,12 +25,52 @@ Ant = {
     self.running = true
     self.active = true
     while self.active do
-      local id, message = rednet.receive("ant", 5)
-      if id and self.active then
-        self:handle_message(id, message)
+      local data = { os.pullEventRaw() }
+      if data[1] == "terminate" then
+        self:stop()
+      elseif data[1] == "rednet_message" and data[4] == "ant" then
+        self:handle_message(data[2], data[3])
+      elseif data[1] == "key" then
+        self:handle_key(data[2])
       end
     end
     self.running = false
+    self:after_stop()
+  end,
+
+  wrap_slect = function(self)
+    if self.selected_line <= 0 then
+      self.selected_line = #self.ants
+    end
+    if self.selected_line > #self.ants then
+      self.selected_line = 1
+    end
+  end,
+
+  handle_key = function(self, key)
+    if key == keys.up then
+      if self.selected_line == nil then
+        self.selected_line = #self.ants
+      else
+        self.selected_line = self.selected_line - 1
+        self:wrap_slect()
+      end
+      self:print_screen()
+    elseif key == keys.down then
+      if self.selected_line == nil then
+        self.selected_line = 1
+      else
+        self.selected_line = self.selected_line + 1
+        self:wrap_slect()
+      end
+      self:print_screen()
+    elseif key == keys.space then
+      self.mode = "control"
+      self:print_screen()
+    elseif key == keys.x then
+      self.mode = "list"
+      self:print_screen()
+    end
   end,
 
   handle_message = function(self, id, message)
@@ -50,7 +93,7 @@ Ant = {
       self.ants[id].name = data[1]
       self.ants[id].location = data[2]
     else
-      self.ants[id] = nil
+      self.ants:remove(id)
     end
     self:print_screen()
   end,
@@ -64,20 +107,34 @@ Ant = {
     term.setCursorPos(1, 2)
     term.setBackgroundColor(colors.black)
     term.setTextColor(colors.white)
-    local line = 2
+    local line = 1
     for id, ant in pairs(self.ants) do
-      term.setCursorPos(1, line)
-      term.write(id .. ": " .. ant.name .. " " .. ant.location)
+      term.setCursorPos(1, line + 1)
+      if line == self.selected_line then
+        term.setBackgroundColor(colors.white)
+        term.setTextColor(colors.black)
+        self.selected_id = id
+      end
+      term.write(id)
+      term.setBackgroundColor(colors.black)
+      term.setTextColor(colors.white)
+      term.write(" " .. ant.name)
+      local w,h = term.getSize()
+      term.setCursorPos(w - #ant.location + 1, line + 1)
+      term.write(ant.location)
       line = line + 1
     end
   end,
 
   stop = function(self)
     self.active = false
-    while self.running do
-      sleep(0.1)
-    end
+  end,
+
+  after_stop = function(self)
     rednet.close(self.modem)
+    term.clear()
+    term.setCursorPos(1, 1)
+    print("Ant Controller stopped")
   end
 }
 
