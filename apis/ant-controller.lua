@@ -38,6 +38,7 @@ Ant = {
     end
     if message:sub(1, 6) == "logout" then
       print(id .. " logged out")
+      self:update_turtle(id, nil)
     end
   end,
 
