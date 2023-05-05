@@ -8,7 +8,7 @@ Ant = {
     setmetatable(o, { __index = self })
     o.modem = modem
     o.name = name or os.getComputerLabel()
-    if name == nil then
+    if o.name == nil then
       error("No name provided and no computer label set")
     end
     o.location = vector.new(0, 0, 0)
