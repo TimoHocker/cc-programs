@@ -34,12 +34,15 @@ Ant = {
     self.running = true
     self.active = true
     while self.active do
-      local id, message = rednet.receive("ant", 5)
-      if id and self.active then
-        self:handle_message(id, message)
+      local data = { os.pullEventRaw() }
+      if data[1] == "terminate" then
+        self:stop()
+      elseif data[1] == "rednet_message" and data[4] == "ant" then
+        self:handle_message(data[2], data[3])
       end
     end
     self.running = false
+    self:after_stop()
   end,
 
   handle_message = function(self, id, message)
@@ -67,6 +70,7 @@ Ant = {
     else
       self.position = vector.new(x, y, z)
     end
+    rednet.broadcast("update " .. self.name .. " " .. self:location_str(), "ant")
   end,
 
   location_str = function(self)
@@ -79,12 +83,16 @@ Ant = {
 
   stop = function(self)
     self.active = false
-    while self.running do
-      sleep(0.1)
-    end
+  end,
+
+  after_stop = function(self)
+    print("Stopping ant")
+    print("Broadcasting logout")
     rednet.broadcast("logout " .. self.name, "ant")
+    print("Unregistering hostname")
     rednet.unhost("ant", self.name)
     rednet.close(self.modem)
+    print("Ant stopped")
   end
 }
 
