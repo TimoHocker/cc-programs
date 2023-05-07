@@ -1,3 +1,5 @@
+local Log = require("/apis/log")
+
 Ant = {
   new = function(self, modem, name)
     if not turtle then
@@ -14,12 +16,14 @@ Ant = {
     o.location = vector.new(0, 0, 0)
     o.active = false
     o.running = false
+    o.log = Log:new()
     return o
   end,
 
   start = function(self)
     print("Starting ant with name " .. self.name)
     rednet.open(self.modem)
+    self.log:enable()
     if (rednet.lookup("ant", self.name) ~= nil) then
       error("Ant with name " .. self.name .. " already exists")
     end
@@ -49,14 +53,32 @@ Ant = {
     if message == "ping" then
       print("Received ping from " .. id)
       rednet.send(id, "pong " .. self.name .. " " .. self:location_str(), "ant")
-    end
-    if message == "stop" then
+    elseif message == "stop" then
       print("Received stop from " .. id)
       self:stop()
-    end
-    if message == "forward" then
+    elseif message == "forward" then
       print("Received forward from " .. id)
       turtle.forward()
+      self:update_location()
+    elseif message == "back" then
+      print("Received back from " .. id)
+      turtle.back()
+      self:update_location()
+    elseif message == "up" then
+      print("Received up from " .. id)
+      turtle.up()
+      self:update_location()
+    elseif message == "down" then
+      print("Received down from " .. id)
+      turtle.down()
+      self:update_location()
+    elseif message == "left" then
+      print("Received left from " .. id)
+      turtle.turnLeft()
+      self:update_location()
+    elseif message == "right" then
+      print("Received right from " .. id)
+      turtle.turnRight()
       self:update_location()
     end
   end,
