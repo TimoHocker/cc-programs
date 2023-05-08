@@ -46,7 +46,7 @@ function pull_all()
 
   pull("/setup/git-setup.lua");
   pull("/setup/gps-setup.lua");
-  
+
   pull("/ant-controller.lua");
   pull("/ant-turtle.lua");
   pull("/git.lua");
@@ -55,5 +55,6 @@ end
 
 return {
   pull = pull,
-  update_git = update_git
+  update_git = update_git,
+  pull_all = pull_all
 }
