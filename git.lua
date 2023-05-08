@@ -1,18 +1,18 @@
-git= require("apis.git")
+git = require("apis.git")
 
-local args = {...}
+local args = { ... }
 
 local cmd = args[1]
 
 if cmd == "pull" then
   table.remove(args, 1)
   git.pull(table.unpack(args))
-end
-if cmd == "update" then
+elseif cmd == "pull-all" then
+  git.pull_all()
+elseif cmd == "update" then
   git.update_git()
   print("Updated git")
-end
-if cmd == "run" then
+elseif cmd == "run" then
   table.remove(args, 1)
   local file = args[1]
   git.pull(file, ".git-run.temp.lua")
