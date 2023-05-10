@@ -124,7 +124,7 @@ Ant = {
       self.ants[id].name = data[1]
       self.ants[id].location = data[2]
     else
-      self.ants:remove(id)
+      table.remove(self.ants, id)
     end
     self:print_screen()
   end,
